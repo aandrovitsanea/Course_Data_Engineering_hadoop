@@ -10,204 +10,204 @@ You typically need to set up the filesystem and specify the temporary directorie
 
 Installing Hadoop on a Linux system involves several steps. Below is a simplified guide to help you set up Hadoop in a standalone mode, which is suitable for running MapReduce jobs on a single node (useful for development and testing). This guide assumes you're using a Debian-based Linux system like Ubuntu.
 
-	### Step 1: Update Your System
+### Step 1: Update Your System
 
-	First, ensure your package lists and installed packages are updated.
+First, ensure your package lists and installed packages are updated.
 
-	```bash
-	sudo apt-get update
-	sudo apt-get upgrade
-	```
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+```
 
-	### Step 2: Install Java
+### Step 2: Install Java
 
-	Hadoop requires Java to be installed on your machine.
+Hadoop requires Java to be installed on your machine.
 
-	```bash
-	sudo apt-get install openjdk-8-jdk
-	```
+```bash
+sudo apt-get install openjdk-8-jdk
+```
 
-	Verify the Java installation by checking the version:
+Verify the Java installation by checking the version:
 
-	```bash
-	java -version
-	```
-	
-	Set `JAVA_HOME` temporarily
-	
-	```bash
-	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
-	```
+```bash
+java -version
+```
 
+Set `JAVA_HOME` temporarily
 
-	### Step 3: Download Hadoop
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+```
 
-	Go to the [Apache Hadoop official website](https://hadoop.apache.org/releases.html) to find the download link for the version you want to install. You can use `wget` to download Hadoop directly to your machine. Replace the URL in the command below with the latest version's URL.
 
-	```bash
-	wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
-	```
+### Step 3: Download Hadoop
 
-	### Step 4: Extract Hadoop
+Go to the [Apache Hadoop official website](https://hadoop.apache.org/releases.html) to find the download link for the version you want to install. You can use `wget` to download Hadoop directly to your machine. Replace the URL in the command below with the latest version's URL.
 
-	Extract the Hadoop tar file to a location of your choice. `/usr/local/hadoop` is commonly used.
+```bash
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+```
 
-	```bash
-	sudo tar zxvf hadoop-3.3.6.tar.gz -C /usr/local
-	```
+### Step 4: Extract Hadoop
 
-	Move and rename the Hadoop folder for convenience:
+Extract the Hadoop tar file to a location of your choice. `/usr/local/hadoop` is commonly used.
 
-	```bash
-	sudo mv /usr/local/hadoop-3.3.6 /usr/local/hadoop
-	```
+```bash
+sudo tar zxvf hadoop-3.3.6.tar.gz -C /usr/local
+```
 
-	### Step 5: Configure Hadoop Environment
+Move and rename the Hadoop folder for convenience:
 
-	Edit your `~/.bashrc` or `~/.profile` file to include Hadoop binaries in your path and set up necessary environment variables.
+```bash
+sudo mv /usr/local/hadoop-3.3.6 /usr/local/hadoop
+```
 
-	```bash
-	nano ~/.bashrc
-	```
+### Step 5: Configure Hadoop Environment
 
-	Append the following lines to the file:
+Edit your `~/.bashrc` or `~/.profile` file to include Hadoop binaries in your path and set up necessary environment variables.
 
-	```bash
-	# Hadoop Related Options
-	export HADOOP_HOME=/usr/local/hadoop
-	export PATH=$PATH:$HADOOP_HOME/bin
-	export PATH=$PATH:$HADOOP_HOME/sbin
-	export HADOOP_MAPRED_HOME=$HADOOP_HOME
-	export HADOOP_COMMON_HOME=$HADOOP_HOME
-	export HADOOP_HDFS_HOME=$HADOOP_HOME
-	export YARN_HOME=$HADOOP_HOME
-	export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-	export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
-	```
+```bash
+nano ~/.bashrc
+```
 
-	Load the new environment variables:
+Append the following lines to the file:
 
-	```bash
-	source ~/.bashrc
-	```
+```bash
+# Hadoop Related Options
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+```
 
-	### Step 6: Configure Hadoop
+Load the new environment variables:
 
-	Edit Hadoop configuration files located in `$HADOOP_HOME/etc/hadoop/` to set up the standalone mode. For a basic setup, minimal configuration is required, but you might want to start with `core-site.xml`, `hdfs-site.xml`, `mapred-site.xml`, and `yarn-site.xml`.
+```bash
+source ~/.bashrc
+```
 
-	As an example, you can set your `core-site.xml` as follows:
+### Step 6: Configure Hadoop
 
-	```xml
-	<configuration>
-	    <property>
-		<name>fs.defaultFS</name>
-		<value>hdfs://localhost:9000</value>
-	    </property>
-	</configuration>
-	```
-	
-		To edit Hadoop configuration files on Ubuntu CLI (Command Line Interface) for setting up standalone mode, you will primarily work with the terminal and a text editor. `nano` is a simple, user-friendly text editor available on most Linux distributions. If you prefer, you can use `vi` or `vim` instead of `nano`, but for beginners, `nano` might be easier.
+Edit Hadoop configuration files located in `$HADOOP_HOME/etc/hadoop/` to set up the standalone mode. For a basic setup, minimal configuration is required, but you might want to start with `core-site.xml`, `hdfs-site.xml`, `mapred-site.xml`, and `yarn-site.xml`.
 
-		First, ensure you've set the `HADOOP_HOME` environment variable correctly. This variable should point to the directory where Hadoop is installed. For example, if you've installed Hadoop in `/usr/local/hadoop`, you can set `HADOOP_HOME` like this:
+As an example, you can set your `core-site.xml` as follows:
 
-		```bash
-		export HADOOP_HOME=/usr/local/hadoop
-		```
+```xml
+<configuration>
+    <property>
+	<name>fs.defaultFS</name>
+	<value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+```
 
-		You might want to add this line to your `~/.bashrc` or `~/.profile` file to make the setting persistent across sessions.
+To edit Hadoop configuration files on Ubuntu CLI (Command Line Interface) for setting up standalone mode, you will primarily work with the terminal and a text editor. `nano` is a simple, user-friendly text editor available on most Linux distributions. If you prefer, you can use `vi` or `vim` instead of `nano`, but for beginners, `nano` might be easier.
 
-		Now, follow these steps to edit the Hadoop configuration files:
+First, ensure you've set the `HADOOP_HOME` environment variable correctly. This variable should point to the directory where Hadoop is installed. For example, if you've installed Hadoop in `/usr/local/hadoop`, you can set `HADOOP_HOME` like this:
 
-		### 1. Editing `core-site.xml`
+```bash
+export HADOOP_HOME=/usr/local/hadoop
+```
 
-		Navigate to the Hadoop configuration directory:
+You might want to add this line to your `~/.bashrc` or `~/.profile` file to make the setting persistent across sessions.
 
-		```bash
-		cd $HADOOP_HOME/etc/hadoop/
-		```
+Now, follow these steps to edit the Hadoop configuration files:
 
-		Open `core-site.xml` for editing with `nano`:
+### 1. Editing `core-site.xml`
 
-		```bash
-		nano core-site.xml
-		```
+Navigate to the Hadoop configuration directory:
 
-		Inside the editor, you will either find an empty `configuration` block or some pre-existing configuration properties. You need to add or update the `fs.defaultFS` property within the `configuration` tags, like so:
+```bash
+cd $HADOOP_HOME/etc/hadoop/
+```
 
-		```xml
-		<configuration>
-		    <property>
-			<name>fs.defaultFS</name>
-			<value>hdfs://localhost:9000</value>
-		    </property>
-		</configuration>
-		```
+Open `core-site.xml` for editing with `nano`:
 
-		If other properties exist, make sure to add your new property block outside those existing blocks but still inside the `<configuration>` tags.
+```bash
+nano core-site.xml
+```
 
-		Press `Ctrl+O`, then `Enter` to save the file, and `Ctrl+X` to exit `nano`.
+Inside the editor, you will either find an empty `configuration` block or some pre-existing configuration properties. You need to add or update the `fs.defaultFS` property within the `configuration` tags, like so:
 
-		### 2. Editing Other Configuration Files
+```xml
+<configuration>
+    <property>
+	<name>fs.defaultFS</name>
+	<value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+```
 
-		The process to edit `hdfs-site.xml`, `mapred-site.xml`, and `yarn-site.xml` is similar. For a basic standalone setup, you may not need to add much to these files, but here are some general guidelines for what they're used for:
+If other properties exist, make sure to add your new property block outside those existing blocks but still inside the `<configuration>` tags.
 
-		- `hdfs-site.xml`: Configurations specific to HDFS, such as replication factor and storage directories.
-		- `mapred-site.xml`: Configurations for MapReduce jobs, such as the framework name (`yarn`) and memory settings.
-		- `yarn-site.xml`: Configurations for YARN, the resource manager, including resource allocation settings and scheduler configurations.
+Press `Ctrl+O`, then `Enter` to save the file, and `Ctrl+X` to exit `nano`.
 
-		For each file, repeat the steps used to edit `core-site.xml`, adapting the properties to your needs based on Hadoop documentation or specific instructions you're following.
+### 2. Editing Other Configuration Files
 
-		### Note
+The process to edit `hdfs-site.xml`, `mapred-site.xml`, and `yarn-site.xml` is similar. For a basic standalone setup, you may not need to add much to these files, but here are some general guidelines for what they're used for:
 
-		- These changes configure Hadoop to run in standalone mode using the default filesystem (HDFS) on `localhost` port `9000`.
-		- Ensure Hadoop and Java paths are correctly set in your `hadoop-env.sh` file, which is also located in the `$HADOOP_HOME/etc/hadoop/` directory.
-		- After configuration, you can start Hadoop services and test your setup by running a MapReduce job or accessing HDFS with the CLI tools provided by Hadoop.
+- `hdfs-site.xml`: Configurations specific to HDFS, such as replication factor and storage directories.
+- `mapred-site.xml`: Configurations for MapReduce jobs, such as the framework name (`yarn`) and memory settings.
+- `yarn-site.xml`: Configurations for YARN, the resource manager, including resource allocation settings and scheduler configurations.
 
-		Remember, the exact configurations might vary based on the Hadoop version and the specific requirements of your project. Always refer to the official Hadoop documentation for the most accurate and detailed information.
+For each file, repeat the steps used to edit `core-site.xml`, adapting the properties to your needs based on Hadoop documentation or specific instructions you're following.
 
-	**Note**: Configuration details can vary based on your specific requirements and Hadoop version. Please refer to the official Hadoop documentation for detailed configuration options.
+### Note
 
-	### Step 7: Format the Hadoop Filesystem
+- These changes configure Hadoop to run in standalone mode using the default filesystem (HDFS) on `localhost` port `9000`.
+- Ensure Hadoop and Java paths are correctly set in your `hadoop-env.sh` file, which is also located in the `$HADOOP_HOME/etc/hadoop/` directory.
+- After configuration, you can start Hadoop services and test your setup by running a MapReduce job or accessing HDFS with the CLI tools provided by Hadoop.
 
-	Before starting Hadoop for the first time, format the Hadoop filesystem (HDFS):
+Remember, the exact configurations might vary based on the Hadoop version and the specific requirements of your project. Always refer to the official Hadoop documentation for the most accurate and detailed information.
 
-	```bash
-	hdfs namenode -format
-	```
+**Note**: Configuration details can vary based on your specific requirements and Hadoop version. Please refer to the official Hadoop documentation for detailed configuration options.
 
-	### Step 8: Start Hadoop
-	
-	Start HDFS by executing:
+### Step 7: Format the Hadoop Filesystem
 
-	```bash
-	$HADOOP_HOME/sbin/start-dfs.sh
+Before starting Hadoop for the first time, format the Hadoop filesystem (HDFS):
 
-	```
+```bash
+hdfs namenode -format
+```
 
-	Start all Hadoop daemons with the following script:
+### Step 8: Start Hadoop
 
-	```bash
-	start-all.sh
-	```
+Start HDFS by executing:
 
-	Check the running Java processes to confirm Hadoop is running:
+```bash
+$HADOOP_HOME/sbin/start-dfs.sh
 
-	```bash
-	jps
-	```
+```
 
-	You should see processes like `Namenode`, `Datanode`, `ResourceManager`, and `NodeManager`.
+Start all Hadoop daemons with the following script:
 
-	### Step 9: Access Hadoop Web Interfaces
+```bash
+start-all.sh
+```
 
-	You can access Hadoop's web interfaces for the Namenode and the ResourceManager using your web browser:
+Check the running Java processes to confirm Hadoop is running:
 
-	- Namenode: `http://localhost:9870/`
-	- ResourceManager: `http://localhost:8088/`
+```bash
+jps
+```
 
-	These URLs may vary depending on your configuration and Hadoop version.
+You should see processes like `Namenode`, `Datanode`, `ResourceManager`, and `NodeManager`.
 
-	**Note**: This guide is for setting up Hadoop in standalone mode for development and testing purposes. For production environments, especially for clustered setups, additional configuration and considerations are necessary.
+### Step 9: Access Hadoop Web Interfaces
+
+You can access Hadoop's web interfaces for the Namenode and the ResourceManager using your web browser:
+
+- Namenode: `http://localhost:9870/`
+- ResourceManager: `http://localhost:8088/`
+
+These URLs may vary depending on your configuration and Hadoop version.
+
+**Note**: This guide is for setting up Hadoop in standalone mode for development and testing purposes. For production environments, especially for clustered setups, additional configuration and considerations are necessary.
 
 
 # Implementation Sample Code: WordCount.java
